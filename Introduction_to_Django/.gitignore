@@ -1,0 +1,24 @@
+# Virtual environment
+LibraryProject/.venv/
+env/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Django migrations (optional)
+*/migrations/*.pyc
+!*/migrations/__init__.py
+
+# Database
+db.sqlite3
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
