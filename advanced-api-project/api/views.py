@@ -1,28 +1,46 @@
-from rest_framework import generics, permissions
+from django.shortcuts import render
+from rest_framework import generics
 from .models import Book
 from .serializers import BookSerializer
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from django_filters import rest_framework
+from rest_framework import filters
 
-class BookListView(generics.ListAPIView):
+# Create your views here.
+# List view for all books
+class ListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [rest_framework.DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filterset_fields = ['title', 'author', 'published_year']
+    ordering_fields = ['title', 'publication_year']
+    search_fields = ['title', 'author']
 
-class BookDetailView(generics.RetrieveAPIView):
+
+# Detail view for a single book
+class DetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]
+    lookup_field = 'id'
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
-class BookCreateView(generics.CreateAPIView):
+# Create view for a new book
+class CreateView(generics.CreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
-class BookUpdateView(generics.UpdateAPIView):
+# Update view for an existing book
+class UpdateView(generics.UpdateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    lookup_field = 'id'
+    permission_classes = [IsAuthenticated]
 
-class BookDeleteView(generics.DestroyAPIView):
+# Delete view for a book
+class DeleteView(generics.DestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    lookup_field = 'id'
+    permission_classes = [IsAuthenticated]
